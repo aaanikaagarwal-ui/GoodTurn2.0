@@ -1,0 +1,24 @@
+# Netlify configuration for GoodTurn (static site, no framework build)
+
+[build]
+  # Generates firebase-config.js from environment variables before publishing.
+  command = "node generate-config.js"
+  # Serve the repo root as-is.
+  publish = "."
+
+# Sensible security headers for all routes.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Long-cache static assets (the logo). HTML stays uncached so updates show immediately.
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# Netlify automatically serves 404.html for unknown paths.

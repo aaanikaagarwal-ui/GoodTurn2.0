@@ -1,24 +1,91 @@
-# GoodTurn2.0
-GoodTurn
+# GoodTurn
 
-A neighborhood task marketplace where people post small jobs they need done, and others accept them, do the work, get paid, and rate each other. It is open to everyone, with a built-in protection layer for younger workers aged 13 to 17.
+A neighborhood help platform that connects **volunteers** with verified local
+residents for small jobs — yard work, tech help, tutoring, pet care, grocery runs.
+Anyone can volunteer; for volunteers **under 18**, a parent/guardian is built into
+every step (approval, message visibility, check-ins, distance & category limits).
 
-What it is
+**Tech:** vanilla HTML / CSS / JavaScript (no framework, no bundler) on the front end,
+**Firebase** (Authentication + Cloud Firestore) on the back end. Deployable as a
+static site to Netlify.
 
-GoodTurn connects people who have small tasks, like yard work, tech help, tutoring, pet care, or grocery runs, with people nearby who are happy to do them for an agreed price. For most users it works like a simple, local version of the gig apps people already know. Someone posts a job, someone else accepts it, they message about the details, the work gets done, the payment is released, and both sides leave a rating.
+---
 
-What makes GoodTurn different is that it welcomes teenage workers without leaving them exposed. When a worker is aged 13 to 17, a light set of protections turns on automatically, while adults using the app with other adults get a normal private experience with none of the extra steps.
+## Pages
 
-How it works
+| File | Purpose |
+|------|---------|
+| `index.html` | Landing / marketing home |
+| `about.html`, `how-it-works.html`, `safety.html`, `contact.html` | Marketing pages |
+| `login.html` | Sign in / sign up / password reset |
+| `app.html` | The signed-in app (job board, dashboards, messages, leaderboard, profile) |
+| `404.html` | Not-found page (served automatically by Netlify) |
+| `app.js` | Shared application logic (Firebase, data layer, all screens) |
+| `styles.css` | Shared styles |
+| `firebase-config.js` | **Your Firebase keys — gitignored**, created from `firebase-config.example.js` |
+| `firestore.rules` | Firestore security rules |
+| `generate-config.js` | Build step that writes `firebase-config.js` from env vars (Netlify) |
 
-Anyone can post a job with a description, a time, and a price, and any worker can request it. Once the poster accepts a worker, the job is booked, the two coordinate in a message thread, and the payment is held in escrow until both confirm the work is finished. After completion, the poster and the worker rate each other, and those ratings build up on their profiles so the community can see who is good to work with.
+`goodturn.html` is the original single-file prototype, kept for reference.
 
-For a worker aged 13 to 17, the account is linked to a guardian. The guardian approves each job before the teen can accept it and can see the poster's profile and rating first. When that teen and an adult are messaging, the guardian can see the thread, so there is no private one to one chat between an adult and a minor, and a simple filter blocks people from swapping phone numbers or moving the conversation off the platform. The teen also checks in by tapping "Arrived" and "Done and safe," and if the second tap does not happen within the job window, the guardian gets an alert. None of this applies to adult to adult jobs.
+---
 
-Who it is for
+## Run locally
 
-GoodTurn is meant for a whole neighborhood. Older residents and busy households get a trusted local hand with small tasks, and people of any age, including teens looking for their first way to earn, get a safe and simple way to find work close to home.
+1. Copy the config template and fill in your Firebase web-app config:
+   ```bash
+   cp firebase-config.example.js firebase-config.js
+   ```
+   (See **FIREBASE_SETUP.md** for how to create the Firebase project, enable
+   Email/Password auth, create Firestore, and publish the rules.)
 
-Tech stack
+2. Open `index.html` in a browser, or serve the folder with any static server, e.g.:
+   ```bash
+   npx serve .
+   ```
 
-GoodTurn is a mobile-friendly web app. Replace this line with what you actually used, for example a React front end with Supabase or Firebase for accounts, data, and messaging, and plain CSS or Tailwind for styling. Payments are simulated with a mock balance for this version, with a real payment processor planned next.
+`firebase-config.js` is gitignored, so your keys are never committed.
+
+---
+
+## Deploy to Netlify
+
+1. Push this repo to GitHub.
+2. In Netlify: **Add new site → Import from Git**, pick the repo.
+3. Build settings (Netlify reads `netlify.toml`, but to confirm):
+   - **Build command:** `node generate-config.js`
+   - **Publish directory:** `.`
+4. Add your Firebase config as **environment variables**
+   (Site settings → Environment variables):
+   ```
+   FIREBASE_API_KEY
+   FIREBASE_AUTH_DOMAIN
+   FIREBASE_PROJECT_ID
+   FIREBASE_STORAGE_BUCKET
+   FIREBASE_MESSAGING_SENDER_ID
+   FIREBASE_APP_ID
+   FIREBASE_MEASUREMENT_ID   (optional)
+   ```
+   The build step writes these into `firebase-config.js` at deploy time.
+5. **Deploy.** Then, in the Firebase console:
+   - **Authentication → Settings → Authorized domains** → add your Netlify domain
+     (e.g. `your-site.netlify.app`), or auth will be blocked.
+   - Make sure Email/Password sign-in is enabled and `firestore.rules` is published.
+
+---
+
+## Security notes
+
+- Firebase web config keys are **not secrets** — they identify your project and are
+  meant for client code. Your data is protected by `firestore.rules` and the
+  authorized-domains list. Keeping the config out of the repo (via env vars) is good
+  hygiene, not a hard requirement.
+- The shipped Firestore rules allow any **signed-in** user to read/write the shared
+  collections (the app's guardian/admin features rely on cross-user reads). Tighten
+  them before a wide public launch — see **FIREBASE_SETUP.md → Hardening**.
+- The wallet/escrow is **mock** (numbers in Firestore). For real money, integrate
+  Stripe via a server/Cloud Function — never move funds from client code.
+- Demo "Try a demo" logins use public credentials and seed sample data; remove them
+  for a strict production launch.
+
+🤖 Built with [Claude Code](https://claude.com/claude-code)

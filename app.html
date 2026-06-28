@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoodTurn</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!-- Firebase SDK (your project config is loaded from firebase-config.js) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+</head>
+<body data-page="app">
+<div id="app">
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img src="logo.png" height="60" width="60" style="object-fit:contain;" alt="GoodTurn logo">
+      GoodTurn
+    </div>
+    <div class="nav-tabs" id="nav-tabs"></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="nav-avatar" id="nav-avatar" onclick="showView('profile')">?</div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+<main>
+  <div id="view-jobs" class="hidden"><div class="inner">
+    <div class="sec-hdr"><div class="sec-title">Find Jobs Near You</div></div>
+    <div class="filters" id="job-filters">
+      <div class="fchip active" onclick="filterJobs('all',this)">All</div>
+      <div class="fchip" onclick="filterJobs('yard',this)">🌿 Yard</div>
+      <div class="fchip" onclick="filterJobs('tech',this)">💻 Tech</div>
+      <div class="fchip" onclick="filterJobs('tutoring',this)">📚 Tutoring</div>
+      <div class="fchip" onclick="filterJobs('pet',this)">🐾 Pets</div>
+      <div class="fchip" onclick="filterJobs('grocery',this)">🛒 Grocery</div>
+    </div>
+    <div style="margin-top:16px" id="job-list-wrap"></div>
+  </div></div>
+
+  <div id="view-job-detail" class="hidden"><div class="inner"><div id="job-detail-content"></div></div></div>
+  <div id="view-my-jobs" class="hidden"><div class="inner"><div class="sec-hdr"><div class="sec-title">My Jobs</div></div><div id="my-jobs-content"></div></div></div>
+  <div id="view-post-job" class="hidden"><div class="inner">
+    <div class="sec-title" style="margin-bottom:20px;">Post a Job</div>
+    <div class="card">
+      <div class="fg"><label>Title</label><input type="text" id="pj-title" placeholder="e.g. Lawn mowing – front yard"></div>
+      <div class="fg"><label>Task Type</label><select id="pj-type"><option value="yard">🌿 Yard Work</option><option value="tech">💻 Tech Help</option><option value="tutoring">📚 Tutoring</option><option value="pet">🐾 Pet Care</option><option value="grocery">🛒 Grocery Run</option></select></div>
+      <div class="fg"><label>Description</label><textarea id="pj-desc" rows="4" placeholder="Describe what needs to be done, tools provided, any special instructions…"></textarea></div>
+      <div class="fg"><label>Address</label><input type="text" id="pj-addr" placeholder="123 Maple St (shared only after booking)"><div class="hint">Shown to teen + guardian only after job is booked.</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="fg"><label>Date</label><input type="date" id="pj-date"></div>
+        <div class="fg"><label>Time Window</label><input type="text" id="pj-time" placeholder="10am – 12pm"></div>
+      </div>
+      <div class="fg"><label>Price ($)</label><input type="number" id="pj-price" min="5" max="500" placeholder="25"><div class="hint">Daytime only (8am–7pm). No evening or overnight tasks.</div></div>
+      <div class="alert alert-info">Your job will be visible once your verified-poster status is confirmed by the admin.</div>
+      <button class="btn btn-primary btn-lg" style="width:100%;" onclick="postJob()">Publish Job</button>
+    </div>
+  </div></div>
+  <div id="view-my-posts" class="hidden"><div class="inner">
+    <div class="sec-hdr"><div class="sec-title">My Posts</div><button class="btn btn-primary btn-sm" onclick="showView('post-job')">+ New Job</button></div>
+    <div id="my-posts-content"></div>
+  </div></div>
+  <div id="view-manage-job" class="hidden"><div class="inner"><div id="manage-job-content"></div></div></div>
+  <div id="view-messages" class="hidden"><div class="inner"><div class="sec-hdr"><div class="sec-title">Messages</div></div><div id="messages-content"></div></div></div>
+  <div id="view-thread" class="hidden"><div class="inner"><div id="thread-content"></div></div></div>
+  <div id="view-checkin" class="hidden"><div class="inner"><div id="checkin-content"></div></div></div>
+  <div id="view-guardian" class="hidden"><div class="inner"><div id="guardian-content"></div></div></div>
+  <div id="view-admin" class="hidden"><div class="inner"><div id="admin-content"></div></div></div>
+  <div id="view-leaderboard" class="hidden"><div class="inner"><div id="leaderboard-content"></div></div></div>
+  <div id="view-profile" class="hidden"><div class="inner"><div id="profile-content"></div></div></div>
+  <div id="view-rate" class="hidden"><div class="inner"><div id="rate-content"></div></div></div>
+</main>
+</div>
+<div id="toast"></div>
+<div id="modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><div id="modal-content"></div></div>
+</div>
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

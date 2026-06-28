@@ -1,0 +1,7 @@
+# Local Firebase project config (contains your keys) — keep out of the repo
+firebase-config.js
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoodTurn – Neighborhood Help Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!-- Firebase SDK (your project config is loaded from firebase-config.js) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+</head>
+<body data-page="landing">
+<div id="app">
+<nav id="nav-public" style="background:rgba(2,12,5,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:0 20px;position:sticky;top:0;z-index:200;transition:background .3s,box-shadow .3s;">
+  <div class="nav-inner">
+    <div class="nav-logo" style="color:#4ade80;flex:0 0 auto;" onclick="showView('landing')">
+      <img src="logo.png" height="60" width="60" style="object-fit:contain;" alt="GoodTurn logo">
+      GoodTurn
+    </div>
+    <div class="pub-links">
+      <a href="how-it-works.html">How it works</a>
+      <a href="about.html">About</a>
+      <a href="safety.html">Safety</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn-ghost" style="padding:10px 20px;font-size:14px;" onclick="showAuth('login')">Sign In</button>
+      <button class="btn-glow" style="padding:11px 22px;font-size:14px;" onclick="showAuth('signup')">Get Started</button>
+    </div>
+  </div>
+</nav>
+<main>
+  <div id="view-landing">
+
+    <!-- HERO -->
+    <div class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="ha1"></div><div class="ha2"></div><div class="ha3"></div>
+      <div class="hero-grid"></div>
+      <div class="hero-inner">
+        <div class="hero-text">
+          <div class="hero-eyebrow">✦ AI-powered &nbsp;·&nbsp; Safety-first &nbsp;·&nbsp; All ages welcome</div>
+          <h1 class="hero-h1">
+            <span class="h1-line1">Your neighbors</span>
+            <span class="h1-line2">need help.</span>
+            <span class="h1-line3">You can earn doing it.</span>
+          </h1>
+          <p class="hero-p">GoodTurn connects volunteers with verified local residents for small jobs — yard work, tech help, pet care, and more. Real pay. Real impact. And for volunteers under 18, a parent is in the loop at every step.</p>
+          <div class="hero-btns">
+            <button class="btn-glow" onclick="showAuth('signup')">Get Started Free &nbsp;→</button>
+            <button class="btn-ghost" onclick="showAuth('login')">Sign In</button>
+          </div>
+          <div class="hero-demos">
+            <span class="hero-demo-lbl">Try a demo:</span>
+            <button class="hero-demo-btn" onclick="quickLogin('teen')">🙋 Volunteer</button>
+            <button class="hero-demo-btn" onclick="quickLogin('guardian')">👪 Parent</button>
+            <button class="hero-demo-btn" onclick="quickLogin('poster')">🏡 Neighbor</button>
+            <button class="hero-demo-btn" onclick="quickLogin('admin')">🔧 Admin</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-orb"></div>
+          <div class="hcard hcard-1">
+            <div class="hbadge">🌿 Yard Work</div>
+            <div class="hrow"><div class="htitle">Mow front lawn &amp; edge walkway</div><div class="hprice">$30</div></div>
+            <div class="hmeta">📅 Tomorrow · 10:00 AM – 12:00 PM</div>
+            <div class="hsep"></div>
+            <div class="hposter"><div class="hava">MC</div><div><div class="hpname">Margaret Chen</div><div class="hprating">★★★★★ 4.8 · Verified</div></div></div>
+            <button class="hbtn">Request This Job</button>
+          </div>
+          <div class="hcard hcard-2">
+            <div class="hbadge">💻 Tech Help</div>
+            <div class="hrow"><div class="htitle">Help set up new iPad &amp; Gmail</div><div class="hprice">$25</div></div>
+            <div class="hmeta">📅 Wednesday · 2:00 PM – 4:00 PM</div>
+            <div class="hsep"></div>
+            <div class="hposter"><div class="hava" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;">RW</div><div><div class="hpname">Robert Williams</div><div class="hprating">★★★★★ 4.5</div></div></div>
+            <button class="hbtn">Request This Job</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll">Scroll to explore<div class="scroll-dot"></div></div>
+    </div>
+
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <div class="marquee-item">🌿 Yard Work</div>
+        <div class="marquee-item">💻 Tech Help</div>
+        <div class="marquee-item">📚 Tutoring</div>
+        <div class="marquee-item">🐾 Pet Care</div>
+        <div class="marquee-item">🛒 Grocery Runs</div>
+        <div class="marquee-item">🔧 Small Tasks</div>
+        <div class="marquee-item">🐶 Dog Walking</div>
+        <div class="marquee-item">🎨 Creative Help</div>
+        <div class="marquee-item">🌿 Yard Work</div>
+        <div class="marquee-item">💻 Tech Help</div>
+        <div class="marquee-item">📚 Tutoring</div>
+        <div class="marquee-item">🐾 Pet Care</div>
+        <div class="marquee-item">🛒 Grocery Runs</div>
+        <div class="marquee-item">🔧 Small Tasks</div>
+        <div class="marquee-item">🐶 Dog Walking</div>
+        <div class="marquee-item">🎨 Creative Help</div>
+      </div>
+    </div>
+
+
+
+    <!-- HOW IT WORKS -->
+    <div class="how-sec">
+      <div class="how-inner">
+        <div class="sec-badge reveal">How it works</div>
+        <h2 class="sec-h2 reveal">Simple, safe, <span class="grad-text">rewarding</span></h2>
+        <p class="sec-sub reveal" style="margin:0 auto 0;">From post to payment in three steps — with built-in safety for younger volunteers.</p>
+        <div class="steps-wrap">
+          <div class="steps-line-bg"></div>
+          <div class="steps-line-fill"></div>
+          <div class="steps-grid">
+            <div class="step reveal"><div class="step-num-wrap"><div class="step-num">1</div></div><div class="step-title">Neighbor posts a job</div><div class="step-desc">Verified residents post tasks with a clear description, a fair price, and a daytime window that works for their schedule.</div></div>
+            <div class="step reveal reveal-delay-1"><div class="step-num-wrap"><div class="step-num">2</div></div><div class="step-title">Request &amp; approve</div><div class="step-desc">A volunteer taps "Request." If they're under 18, their parent is notified and approves that specific job before anything is booked — no exceptions.</div></div>
+            <div class="step reveal reveal-delay-2"><div class="step-num-wrap"><div class="step-num">3</div></div><div class="step-title">Done and paid</div><div class="step-desc">The volunteer checks in on arrival and taps "All Done!" when finished. Escrow releases payment once both sides confirm.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="feat-sec">
+      <div class="feat-inner">
+        <div class="sec-badge reveal">Platform features</div>
+        <h2 class="sec-h2 reveal">Everything you need, <span class="grad-text">nothing you don't</span></h2>
+        <div class="feat-grid">
+          <div class="feat-card reveal"><div class="feat-icon-wrap fi-green">✦</div><div class="feat-title">AI Smart Matching</div><div class="feat-desc">Our AI scores every job against a volunteer's skills, availability, and past ratings — so the right person shows up for the right job, every time.</div></div>
+          <div class="feat-card reveal reveal-delay-1"><div class="feat-icon-wrap fi-blue">🛡️</div><div class="feat-title">AI Safety Screening</div><div class="feat-desc">Every job listing is scanned by AI before going live. For under-18s, parents get a safety score and approve everything before a volunteer is booked.</div></div>
+          <div class="feat-card reveal reveal-delay-2"><div class="feat-icon-wrap fi-amber">💳</div><div class="feat-title">Secure Escrow Payment</div><div class="feat-desc">Funds are held securely when a job is booked and released only after both sides confirm the work is complete.</div></div>
+          <div class="feat-card reveal reveal-delay-3"><div class="feat-icon-wrap fi-purple">⭐</div><div class="feat-title">Reputation System</div><div class="feat-desc">Star ratings and reviews build trust over time. Great volunteers get more jobs; reliable neighbors attract better applicants.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIALS removed -->
+
+    <!-- SAFETY -->
+    <div class="safety-sec">
+      <div class="safety-inner" style="text-align:center;">
+        <div class="safety-badge reveal">🔒 Safety first</div>
+        <h2 class="sec-h2 reveal" style="margin-bottom:10px;">Built safe from the <span style="background:linear-gradient(135deg,#f59e0b,#d97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">ground up</span></h2>
+        <p class="reveal" style="color:#78350f;font-size:17px;max-width:480px;margin:0 auto;">Every safety rule is in the core, not bolted on as an afterthought.</p>
+        <div class="safety-grid" style="text-align:left;">
+          <div class="safety-item reveal"><div class="safety-icon">🏠</div><div class="safety-title">Verified posters only</div><div class="safety-text">Only residents approved by a community admin can publish jobs on the platform.</div></div>
+          <div class="safety-item reveal reveal-delay-1"><div class="safety-icon">👪</div><div class="safety-title">Parent approves every job</div><div class="safety-text">Volunteers under 18 can't be booked until their guardian approves that specific listing — no exceptions.</div></div>
+          <div class="safety-item reveal reveal-delay-2"><div class="safety-icon">👁️</div><div class="safety-title">Guardian sees all messages</div><div class="safety-text">For minors, no private one-on-one chat — a parent is a silent participant on every thread.</div></div>
+          <div class="safety-item reveal"><div class="safety-icon">🚫</div><div class="safety-title">Contact filter active</div><div class="safety-text">Phone numbers, emails, and off-platform invites are automatically blocked in messages.</div></div>
+          <div class="safety-item reveal reveal-delay-1"><div class="safety-icon">📍</div><div class="safety-title">Arrived + Done check-ins</div><div class="safety-text">Guardian notified at arrival and completion. A missed check-in triggers an immediate alert.</div></div>
+          <div class="safety-item reveal reveal-delay-2"><div class="safety-icon">☀️</div><div class="safety-title">Daytime jobs only</div><div class="safety-text">No evening or overnight tasks. Guardians can also cap distance and allowed job types.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-sec">
+      <div class="cta-a1"></div><div class="cta-a2"></div>
+      <div class="cta-inner">
+        <h2 class="cta-h">Ready to make a difference<br>in your <span>neighborhood?</span></h2>
+        <p class="cta-p">Join volunteers earning real money and neighbors getting real help — safely, transparently, together.</p>
+        <div class="cta-btns">
+          <button class="btn-glow" onclick="showAuth('signup')">Create Free Account &nbsp;→</button>
+          <button class="btn-ghost" onclick="showAuth('login')">Sign In</button>
+        </div>
+        <p class="cta-demo-lbl">Or explore with a demo account:</p>
+        <div class="cta-demos">
+          <button class="hero-demo-btn" onclick="quickLogin('teen')">🙋 Volunteer</button>
+          <button class="hero-demo-btn" onclick="quickLogin('guardian')">👪 Parent / Guardian</button>
+          <button class="hero-demo-btn" onclick="quickLogin('poster')">🏡 Neighbor</button>
+          <button class="hero-demo-btn" onclick="quickLogin('admin')">🔧 Admin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+<div id="toast"></div>
+<div id="modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><div id="modal-content"></div></div>
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="nav-logo" href="index.html"><img src="logo.png" height="34" width="34" style="object-fit:contain;" alt="GoodTurn logo"> GoodTurn</a>
+        <p>Neighbors helping neighbors. Real pay, real impact, and safety built in for every volunteer under 18.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4>Platform</h4>
+          <a href="index.html">Home</a>
+          <a href="how-it-works.html">How it works</a>
+          <a href="about.html">About</a>
+          <a href="safety.html">Safety</a>
+        </div>
+        <div class="footer-col"><h4>Get started</h4>
+          <a href="login.html">Sign in</a>
+          <a href="login.html?tab=signup">Create account</a>
+          <a href="app.html">Open the app</a>
+        </div>
+        <div class="footer-col"><h4>Company</h4>
+          <a href="contact.html">Contact</a>
+          <a href="safety.html">Trust &amp; safety</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 GoodTurn &middot; Neighbors helping neighbors, one good turn at a time.</div>
+  </div>
+</footer>
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

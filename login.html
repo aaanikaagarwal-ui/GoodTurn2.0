@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in · GoodTurn</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!-- Firebase SDK (your project config is loaded from firebase-config.js) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+</head>
+<body data-page="auth">
+<div class="auth-shell">
+  <div class="auth-topbar">
+    <a class="nav-logo" href="index.html" style="display:flex;align-items:center;gap:4px;text-decoration:none;font-weight:800;">
+      <img src="logo.png" height="48" width="48" style="object-fit:contain;" alt="GoodTurn logo"> GoodTurn
+    </a>
+  </div>
+  <main class="auth-main">
+  <div id="view-auth"><div class="inner" style="max-width:460px;">
+    <button onclick="location.href='index.html'" style="background:none;border:none;color:var(--text2);font-size:14px;cursor:pointer;margin-bottom:20px;padding:0;display:flex;align-items:center;gap:6px;font-family:var(--font);">← Back to home</button>
+    <div class="auth-title" id="auth-title">Welcome back</div>
+    <div class="auth-sub" id="auth-sub">Sign in to your account</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</div>
+      <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Create Account</div>
+    </div>
+    <div id="auth-login">
+      <div class="fg"><label>Email</label><input type="email" id="login-email" placeholder="you@email.com"></div>
+      <div class="fg"><label>Password</label><input type="password" id="login-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <div style="text-align:right;margin-top:6px;"><button class="link-btn" style="font-size:13px;" onclick="doReset()">Forgot password?</button></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:20px;" onclick="doLogin()">Sign In</button>
+      <div class="divider">or try a demo</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="quickLogin('teen')">🙋 Volunteer</button>
+        <button class="btn btn-secondary btn-sm" onclick="quickLogin('guardian')">👪 Parent</button>
+        <button class="btn btn-secondary btn-sm" onclick="quickLogin('poster')">🏡 Neighbor</button>
+        <button class="btn btn-secondary btn-sm" onclick="quickLogin('admin')">🔧 Admin</button>
+      </div>
+      <p style="margin-top:16px;font-size:14px;color:var(--text2);">No account? <button class="link-btn" onclick="switchAuthTab('signup')">Sign up</button></p>
+    </div>
+    <div id="auth-signup" class="hidden">
+      <div class="fg">
+        <label>I am a…</label>
+        <div class="role-picker">
+          <div class="role-opt selected" id="role-teen" onclick="selectRole('teen')"><div class="role-opt-icon">🎒</div><div class="role-opt-label">Volunteer</div></div>
+          <div class="role-opt" id="role-poster" onclick="selectRole('poster')"><div class="role-opt-icon">🏡</div><div class="role-opt-label">Neighbor</div></div>
+          <div class="role-opt" id="role-guardian" onclick="selectRole('guardian')"><div class="role-opt-icon">👪</div><div class="role-opt-label">Parent</div></div>
+        </div>
+      </div>
+      <div class="fg"><label>Full Name</label><input type="text" id="su-name" placeholder="Your real name"></div>
+      <div class="fg"><label>Email</label><input type="email" id="su-email" placeholder="you@email.com"></div>
+      <div class="fg"><label>Password</label><input type="password" id="su-pw" placeholder="Min 8 characters"></div>
+      <div class="fg" id="su-age-grp"><label>Your Age <span style="color:var(--red)">*</span></label><input type="number" id="su-age" min="13" max="120" placeholder="e.g. 17" oninput="updateGuardianField()"><div class="hint">Volunteers under 18 get extra safety — a parent must approve each job.</div></div>
+      <div class="fg hidden" id="su-guard-grp">
+        <label>Parent / Guardian Email <span style="color:var(--red)">*</span></label>
+        <input type="email" id="su-guard" placeholder="parent@email.com">
+        <div class="hint">Your parent must confirm before you can accept jobs.</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:16px;" onclick="doSignup()">Create Account</button>
+      <p style="font-size:14px;color:var(--text2);">Already have an account? <button class="link-btn" onclick="switchAuthTab('login')">Sign in</button></p>
+    </div>
+  </div></div>
+
+  </main>
+</div>
+<div id="toast"></div>
+<div id="modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><div id="modal-content"></div></div>
+</div>
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
